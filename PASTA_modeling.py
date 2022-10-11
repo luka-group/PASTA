@@ -63,7 +63,7 @@ class BertPastaLayer(BertLayer):
             assert special_token_indices.shape[0] <= self.num_special, "Initialized vectors should not be less than the number of special tokens in input!"
             for i in range(special_token_indices.shape[0]):
                 special_token = self.special_token_embedding(torch.tensor([i]).to(next(self.parameters()).device)).squeeze()
-                special_token_index = special_token_indices[i].unsqueeze(-1).expand(-1,-1, self.config.hidden_size).clone()
+                special_token_index = special_token_indices[i].unsqueeze(-1).expand(-1,-1, self.config.hidden_size)
                 special_token_tensor = self.dropout(special_token * special_token_index)
                 hidden_states = hidden_states + special_token_tensor
         
