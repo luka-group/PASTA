@@ -26,7 +26,7 @@ class BertPastaEmbeddings(BertEmbeddings):
         special_token_positions = is_cls_token + is_sep_token # shape (batch_size, seq_length)
         num_specials = torch.sum(special_token_positions[0]).item()
         token_indices = special_token_positions.nonzero() # shape (num_specials*batch_size, 2)
-        is_special_token_tensors = torch.zeros_like(special_token_positions).unsqueeze(dim=0).expand(num_specials, -1,-1).long().to(input_ids.device) # shape (num_specials, batch_size, seq_length), with each row being a one-hot tensor for a particular special token
+        is_special_token_tensors = torch.zeros_like(special_token_positions).unsqueeze(dim=0).expand(num_specials, -1,-1).long().clone().to(input_ids.device) # shape (num_specials, batch_size, seq_length), with each row being a one-hot tensor for a particular special token
         for i in range(len(token_indices)):
             current_token = i % num_specials
             is_special_token_tensors[current_token][token_indices[i][0],token_indices[i][1]] = 1
@@ -63,7 +63,7 @@ class BertPastaLayer(BertLayer):
             assert special_token_indices.shape[0] <= self.num_special, "Initialized vectors should not be less than the number of special tokens in input!"
             for i in range(special_token_indices.shape[0]):
                 special_token = self.special_token_embedding(torch.tensor([i]).to(next(self.parameters()).device)).squeeze()
-                special_token_index = special_token_indices[i].unsqueeze(-1).expand(-1,-1, self.config.hidden_size)
+                special_token_index = special_token_indices[i].unsqueeze(-1).expand(-1,-1, self.config.hidden_size).clone()
                 special_token_tensor = self.dropout(special_token * special_token_index)
                 hidden_states = hidden_states + special_token_tensor
         
