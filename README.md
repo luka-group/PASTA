@@ -15,3 +15,11 @@ transformers==4.20.1
 ```
 
 
+```
+@inproceedings{yang2023pasta,
+  title={Parameter-efficient Tuning with Special Token Adaptation,
+  author={Yang, Xiaocong and Huang, James and Zhou, Wenxuan and Chen, Muhao},
+  booktitle={Proceedings of the 17th Conference of the European Chapter of the Association for Computational Linguistics (EACL)},
+  year={2023}
+}
+```
